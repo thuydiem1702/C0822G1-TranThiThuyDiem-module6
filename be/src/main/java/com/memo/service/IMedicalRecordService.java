@@ -1,11 +1,13 @@
 package com.memo.service;
 
 import com.memo.model.MedicalRecord;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface IMedicalRecordService {
-    List<MedicalRecord> showList();
+    Page<List<MedicalRecord>> showList(String search, Pageable pageable);
 
     void deleteMedicalRecord(Integer id);
 

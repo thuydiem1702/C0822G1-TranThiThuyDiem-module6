@@ -10,8 +10,8 @@ export class MedicalRecordService {
   constructor(private httpClient: HttpClient) {
   }
 
-  getAll() {
-    return this.httpClient.get<MedicalRecord[]>('http://localhost:8080/list');
+  getAll(search: string, page: number) {
+    return this.httpClient.get<MedicalRecord[]>('http://localhost:8080/list?search=' +search + '&page=' + page);
   }
 
 

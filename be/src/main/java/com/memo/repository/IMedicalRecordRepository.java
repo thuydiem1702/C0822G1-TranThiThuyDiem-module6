@@ -1,6 +1,8 @@
 package com.memo.repository;
 
 import com.memo.model.MedicalRecord;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -10,8 +12,10 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 public interface IMedicalRecordRepository extends JpaRepository<MedicalRecord, Integer> {
-    @Query(value = "select * from medical_record", nativeQuery = true)
-    List<MedicalRecord> showList();
+    @Query(value = "select m.* from medical_record m inner join patient p on m.patient_id = p.id where p.name like concat('%', :search , '%')",
+            countQuery = "select count(*) from (select m.* from medical_record m inner join patient p on m.patient_id = p.id where p.name like concat('%', :search , '%')) as diem"
+            , nativeQuery = true)
+    Page<List<MedicalRecord>> showList(@Param("search") String search, Pageable pageable);
 
     @Modifying
     @Transactional

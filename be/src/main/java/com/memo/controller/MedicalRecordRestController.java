@@ -5,6 +5,9 @@ import com.memo.model.Patient;
 import com.memo.service.IMedicalRecordService;
 import com.memo.service.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,11 +26,9 @@ public class MedicalRecordRestController {
     private IPatientService patientService;
 
     @GetMapping("/list")
-    private ResponseEntity<List<MedicalRecord>> showList() {
-        List<MedicalRecord> medicalRecordListDtoList = medicalRecordService.showList();
-        if (medicalRecordListDtoList.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    private ResponseEntity<?> showList(@RequestParam(defaultValue = "", required = false) String search,
+                                       @PageableDefault(size = 2) Pageable pageable) {
+        Page<List<MedicalRecord>> medicalRecordListDtoList = medicalRecordService.showList(search, pageable);
         return new ResponseEntity<>(medicalRecordListDtoList, HttpStatus.OK);
     }
 

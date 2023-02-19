@@ -9,26 +9,28 @@ import {MedicalRecordService} from "../../service/medical-record.service";
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
-  medicalRecordList: MedicalRecord[] = [];
+  medicalRecordList;
 
   temp: MedicalRecord = {};
+  search: string = '';
 
   constructor(private medicalRecordSever: MedicalRecordService) {
-    this.getAll();
+
   }
 
   ngOnInit(): void {
+    this.getAll(0);
   }
 
-  getAll() {
-    this.medicalRecordSever.getAll().subscribe(next => {
+  getAll(page: number) {
+    this.medicalRecordSever.getAll(this.search, page).subscribe(next => {
       this.medicalRecordList = next;
     });
   }
 
   delete() {
     this.medicalRecordSever.delete(this.temp.id).subscribe(next => {
-      this.getAll();
+      this.getAll(0);
       alert('Xoá thành công !!!');
     });
   }
